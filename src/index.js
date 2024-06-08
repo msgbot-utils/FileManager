@@ -1,0 +1,1 @@
+let storage = require("./storage");
