@@ -1,16 +1,15 @@
 let CORE = require("./core.js");
 let File = java.io.File;
-let Files = java.nio.file.Files;
 
 function storage(path) {
     let _File = File(path);
     if(!_File.exists()) return -1;
     let bytesList = DirectoryReader(path);
-    let bytes = 0; bytesList.map(e => bytes += e.bytes.length);
+    let bytes = 0; bytesList.map(e => bytes += e.bytes);
     return CORE(bytes);
 }
 
-let DirectoryReader = /** @classes */ function (directoryPath) {
+let DirectoryReader = /** @functions */ function (directoryPath) {
     let directory = new File(directoryPath);
     
     let bytes = [];
@@ -18,14 +17,14 @@ let DirectoryReader = /** @classes */ function (directoryPath) {
     if(directory.exists() && directory.isDirectory()) {
         for(let file of directory.listFiles()) {
             if(file.isFile()) {
-                let fileBytes = Files.readAllBytes(file.toPath());
+                let fileBytes = file.length();
                 bytes.push({
                     path: file.toPath().toString(),
                     name: file.getName(),
                     bytes: fileBytes
                 });
             }else if(file.isDirectory()) {
-                bytes = bytes.concat(DirectoryReader(file.getName()));
+                bytes = bytes.concat(DirectoryReader(file.toPath()));
             }
         }
 
@@ -33,7 +32,7 @@ let DirectoryReader = /** @classes */ function (directoryPath) {
         bytes.push({
             path: file.toPath().toString(),
             name: directory.getName(),
-            bytes: Files.readAllBytes(directory.toPath())
+            bytes: directory.length()
         });
     }
 
