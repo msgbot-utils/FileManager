@@ -1,6 +1,12 @@
 let CORE = require("./core.js");
 let File = java.io.File;
 
+/**
+ * 
+ * @param {string} path - directory
+ * @returns {number} - file size - bytes
+ */
+
 function storage(path) {
     let _File = File(path);
     if(!_File.exists()) return -1;
@@ -8,6 +14,12 @@ function storage(path) {
     let bytes = 0; bytesList.map(e => bytes += e.bytes);
     return CORE(bytes);
 }
+
+/**
+ * 
+ * @param {string} directoryPath - directory
+ * @returns {array} - lists
+ */
 
 let DirectoryReader = /** @functions */ function (directoryPath) {
     let directory = new File(directoryPath);
