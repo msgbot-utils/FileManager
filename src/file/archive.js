@@ -1,89 +1,109 @@
-/**]
- import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
+importPackage(java.io);
+importPackage(java.util.zip);
 
-public class ZipUtils {
+/**
+ * 
+ * @param {string} path - archive path
+ * @param {string} toPath - result path
+ * @param {string} password - encrypt password , not required
+ * @returns {object} - value
+ */
 
-    public static boolean zip(String path, String path2, String password) {
-        File fileToZip = new File(path);
-        File zipFile = new File(path2);
+function zip(path, toPath, password) {
+    let file = new File(path);
+    let zipFile = new File(toPath);
 
-        // 파일 또는 디렉토리가 존재하지 않으면 압축 실패
-        if (!fileToZip.exists()) {
-            return false;
+    if (!file.exists()) {
+        return {
+            result: false,
+            reason: "not exists",
+            path: [file, zipFile],
+            v: {},
+        };
+    }
+
+    try {
+        let fos = new FileOutputStream(zipFile);
+        let zos = new ZipOutputStream(fos);
+
+        if (password != null && pasword != "") {
+            zos.setMethod(ZipOutputStream.DEFLATED);
+            zos.setEncryptionMethod(ZipOutputStream.STANDARD_ENCRYPTION);
+            zos.setPassword(password.split(""));
         }
 
-        try {
-            FileOutputStream fos = new FileOutputStream(zipFile);
-            ZipOutputStream zos = new ZipOutputStream(fos);
+        if (file.isDirectory()) {
 
-            if (password != null && !password.isEmpty()) {
-                zos.setMethod(ZipOutputStream.DEFLATED);
-                zos.setEncryptionMethod(ZipOutputStream.STANDARD_ENCRYPTION);
-                zos.setPassword(password.toCharArray());
-            }
-
-            if (fileToZip.isDirectory()) {
-                zipDirectory(fileToZip, fileToZip.getName(), zos);
-            } else {
-                zipFile(fileToZip, fileToZip.getName(), zos);
+            if (file.isDirectory()) {
+                zipDirectory(file, file.getName(), zos);
+            } else if (file.isFile()) {
+                zipFile(file, file.getName(), zos);
             }
 
             zos.close();
             fos.close();
 
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    private static void zipFile(File fileToZip, String fileName, ZipOutputStream zos) throws IOException {
-        FileInputStream fis = new FileInputStream(fileToZip);
-        ZipEntry zipEntry = new ZipEntry(fileName);
-        zos.putNextEntry(zipEntry);
-
-        byte[] bytes = new byte[1024];
-        int length;
-        while ((length = fis.read(bytes)) >= 0) {
-            zos.write(bytes, 0, length);
-        }
-
-        zos.closeEntry();
-        fis.close();
-    }
-
-    private static void zipDirectory(File dirToZip, String baseName, ZipOutputStream zos) throws IOException {
-        File[] files = dirToZip.listFiles();
-        if (files != null) {
-            for (File file : files) {
-                if (file.isDirectory()) {
-                    zipDirectory(file, baseName + File.separator + file.getName(), zos);
-                } else {
-                    zipFile(file, baseName + File.separator + file.getName(), zos);
+            return {
+                result: true,
+                reason: "",
+                path: [file, zipFile],
+                v: {
+                    type: file.isFile() ? "file" : "directory",
+                    password: password ? password : ""
                 }
-            }
+            };
         }
+    } catch (err) {
+        return {
+            result: false,
+            reason: "caught error while archive",
+            path: [file, zipFile],
+            v: err
+        };
+    }
+}
+
+/**
+ * 
+ * @param {string} file - file path
+ * @param {string} fileName - fileName
+ * @param {object} zos - new ZipOutputStream()
+ */
+
+function zipFile(file, fileName, zos) {
+    var fis = new FileInputStream(file);
+    var zipEntry = new ZipEntry(fileName);
+    zos.putNextEntry(zipEntry);
+
+    var bytes = java.lang.reflect.Array.newInstance(java.lang.Byte.TYPE, 1024);
+    var length;
+    while ((length = fis.read(bytes)) >= 0) {
+        zos.write(bytes, 0, length);
     }
 
-    public static void main(String[] args) {
-        String path = "your_source_path_here";
-        String path2 = "your_target_zip_path_here";
-        String password = "your_password_here"; // Optional, leave empty if not needed
+    zos.closeEntry();
+    fis.close();
+}
 
-        boolean success = zip(path, path2, password);
+/**
+ * 
+ * @param {string} file - file path
+ * @param {string} fileName - fileName
+ * @param {object} zos - new ZipOutputStream()
+ */
 
-        if (success) {
-            System.out.println("Compression successful.");
-        } else {
-            System.out.println("Compression failed.");
+function zipDirectory(file, fileName, zos) {
+    var files = file.listFiles();
+    if (files != null) {
+        for (var i = 0; i < files.length; i++) {
+            var file = files[i];
+            if (file.isDirectory()) {
+                zipDirectory(file, fileName + File.separator + file.getName(), zos);
+            } else {
+                zipFile(file, fileName + File.separator + file.getName(), zos);
+            }
         }
     }
 }
 
- */
+module.exports = zip;
