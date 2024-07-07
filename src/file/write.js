@@ -52,7 +52,7 @@ function write(path, bytes) {
  */
 
 function writeString(path, str) {
-    let bytes = java.lang.String(str, "UTF-8").getBytes();
+    let bytes = java.lang.String(str).getBytes();
     return write(path, bytes);
 }
 
