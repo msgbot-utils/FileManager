@@ -1,5 +1,5 @@
 importClass(java.io.File);
-importPackage(java.nio.file.Files);
+importClass(java.nio.file.Files);
 
 function read(path) {
     let file = new File(path);
@@ -12,7 +12,7 @@ function read(path) {
         };
     }
 
-    let bytes = readAllBytes(file.toPath());
+    let bytes = Files.readAllBytes(file.toPath());
     return {
         result: true,
         reason: "",
