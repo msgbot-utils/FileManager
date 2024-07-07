@@ -1,3 +1,6 @@
+let read = require("./file/read");
+let write = require("./file/write");
+
 let utils = {
     archive: require("./file/archive"),
     extract: require("./file/extract"),
@@ -6,7 +9,9 @@ let utils = {
 
 module.exports = {
     utils: utils,
-    read: require("./file/read"),
-    write: require("./file/write"),
+    read: read.read,
+    write: write.write,
+    rawRead: read.rawRead,
+    rawWrite: write.rawWrite,
     delete: require("./file/delete"),
 };
