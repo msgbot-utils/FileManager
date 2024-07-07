@@ -7,6 +7,6 @@ en : get File Size , upload File To Kakao , delete File , archive , extract , cr
 
 # remain Functions
 
-File : parse , stringify , create , read , write , edit
+File : parse , stringify , create , read , edit
 
 etc. upload File In Kakao /* lastest */

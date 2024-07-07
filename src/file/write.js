@@ -62,6 +62,17 @@ function writeString(path, str) {
  * @return {void}
  */
 function download(path, Url){
+    let file = new File(path)
+
+    if(file.exists() && file.isDirectory()) {
+        return {
+            result: false,
+            reason: "path is dir",
+            path: path,
+            getBytes: () => bytes,
+        }
+    }
+
     try{
         let url = new URL(Url);
         let connection = url.openConnection();
