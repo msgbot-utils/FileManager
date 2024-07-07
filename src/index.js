@@ -1,9 +1,12 @@
-let storage = require("./storage");
+let utils = {
+    archive: require("./file/archive"),
+    extract: require("./file/extract"),
+    storage: require("./file/storage"),
+};
 
-function setFile /** @constructor */ (path) {
-    this.filePath = path;
-}
-
-setFile.toString = (() => "new <requireName> (string: filePath)").bind({});
-
-module.exports = setFile;
+module.exports = {
+    utils: utils,
+    read: require("./file/read"),
+    write: require("./file/write"),
+    delete: require("./file/delete"),
+};
