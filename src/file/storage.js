@@ -51,4 +51,4 @@ let DirectoryReader = /** @functions */ function (directoryPath) {
     return bytes;
 }
 
-exports['getStorage'] = storage;
+module.exports = storage;
