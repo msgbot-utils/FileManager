@@ -6,7 +6,7 @@ importPackage(org.apache.commons.compress.utils);
  * 
  * @param {string} zipFile - zip file path
  * @param {string} toPath - extracted zip file path
- * @param {string} password - decrypt key , not required
+ * @param {string?} password - decrypt key , not required
  * @returns {object} - value
  */
 
