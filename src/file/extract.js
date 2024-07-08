@@ -1,12 +1,11 @@
 importPackage(java.io);
-importPackage(org.apache.commons.compress.archivers.zip);
-importPackage(org.apache.commons.compress.utils);
+importPackage(java.util.zip);
 
 /**
  * 
  * @param {string} zipFile - zip file path
  * @param {string} toPath - extracted zip file path
- * @param {string?} password - decrypt key , not required
+ * @param {string?} password - decrypt key, optional
  * @returns {object} - value
  */
 
@@ -23,11 +22,17 @@ function unzip(zipFile, toPath, password) {
     try {
         var file = new File(toPath);
         if (!file.exists()) {
-            file.mkdirs();
+            (new File(toPath.split("/").slice(0, -1).join("/") || toPath)).mkdirs();
         }
 
-        var zipFileObj = new ZipFile(new File(zipFile), password ? password.split("") : null);
-        var entries = zipFileObj.getEntries();
+        var zipFileObj;
+        if (password) {
+            zipFileObj = new ZipFile(zipFile);
+        } else {
+            zipFileObj = new ZipFile(zipFile, password.split(""));
+        }
+
+        var entries = zipFileObj.entries();
         
         while (entries.hasMoreElements()) {
             var entry = entries.nextElement();
