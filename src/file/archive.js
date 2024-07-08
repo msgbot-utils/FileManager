@@ -1,6 +1,6 @@
 importPackage(java.io);
 importPackage(java.util.zip);
-// 세션 챗으로 대화해요 How
+
 /**
  * 
  * @param {string} path - archive path
@@ -11,28 +11,26 @@ importPackage(java.util.zip);
 
 function zip(path, toPath, password) {
     let file = new File(path);
-    let zipFile = new File(toPath);
+    let zFile = new File(toPath);
 
     if (!file.exists()) {
         return {
             result: false,
             reason: "not exists",
-            path: [file, zipFile],
+            path: [path, toPath],
             v: {},
         };
     }
 
     try {
-        let fos = new FileOutputStream(zipFile);
+        let fos = new FileOutputStream(zFile);
         let zos = new ZipOutputStream(fos);
 
-        if (password != null && pasword != "") {
+        if (password != null && password != "") {
             zos.setMethod(ZipOutputStream.DEFLATED);
             zos.setEncryptionMethod(ZipOutputStream.STANDARD_ENCRYPTION);
             zos.setPassword(password.split(""));
         }
-
-        if (file.isDirectory()) {
 
             if (file.isDirectory()) {
                 zipDirectory(file, file.getName(), zos);
@@ -46,18 +44,17 @@ function zip(path, toPath, password) {
             return {
                 result: true,
                 reason: "",
-                path: [file, zipFile],
+                path: [path, toPath],
                 v: {
                     type: file.isFile() ? "file" : "directory",
                     password: password ? password : ""
                 }
             };
-        }
     } catch (err) {
         return {
             result: false,
             reason: "caught error while archive",
-            path: [file, zipFile],
+            path: [path, toPath],
             v: err
         };
     }
