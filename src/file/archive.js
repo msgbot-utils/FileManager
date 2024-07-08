@@ -62,7 +62,7 @@ function zip(path, toPath, password) {
 
 /**
  * 
- * @param {string} file - file path
+ * @param {object} file - java file
  * @param {string} fileName - fileName
  * @param {object} zos - new ZipOutputStream()
  */
@@ -84,7 +84,7 @@ function zipFile(file, fileName, zos) {
 
 /**
  * 
- * @param {string} file - file path
+ * @param {object} file - java file
  * @param {string} fileName - fileName
  * @param {object} zos - new ZipOutputStream()
  */
