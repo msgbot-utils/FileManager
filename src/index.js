@@ -5,6 +5,7 @@ let utils = {
     archive: require("./file/archive"),
     extract: require("./file/extract"),
     storage: require("./file/storage"),
+    download: write.downloadUrl
 };
 
 module.exports = {
